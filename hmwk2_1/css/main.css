@@ -1,0 +1,29 @@
+.list-group-item:hover {
+    background-color:lightgreen;
+    cursor: pointer;
+}
+.questionChoice {
+display:block;
+background-color:#ccc;
+margin-top:10px;
+}
+#mainHead {
+ position: fixed;
+ width: 100%;
+ background-color:white;
+ z-index: 1;
+ padding: 10px 0px;
+    
+}
+.space {
+    width:100%;
+    height: 150px;
+}
+.navbar-brand {
+    background: url('../imgs/logo.png');
+    background-size: cover;
+    width: 387px;
+    height: 83px;
+    text-indent: 9999px;
+    margin: 0 auto;
+}

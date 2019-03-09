@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>List of quizes</title>
+        <meta charset="utf-8">
+        <meta name="description" content="List of quizes at KFUPM">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body class="container">
+        <header>
+            <nav class="navbar navbar-light bg-light fixed-top">
+                <a class="navbar-brand" href="#"><span>Navbar</span></a>
+              </nav>          
+        </header>
+        <div class="space">
+            &NonBreakingSpace;
+        </div>
+        <main>
+            <h1>Fill info</h1>
+            <div id="notification"></div>
+                <form id="loginForm">
+                        <div class="jumbotron">
+                    <div class="form-group">
+                        <label for="usernameInput">Your name</label>
+                        <input type="text" id="usernameInput" class="form-control" placeholder="Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailInput">Email</label>
+                        <input type="email" id="emailInput" class="form-control" placeholder="email@example.com" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Take the quiz</button>
+                </div>
+                </form>
+            
+        </main>
+        <script>
+           document.getElementById('loginForm').addEventListener('submit', (event)=>{
+            let reUser = /^[a-zA-Z][\sa-zA-Z]*$/;
+            let reEmail = /^(\S+)@[a-zA-Z0-9.]+\.[a-zA-Z0-9.]+$/;
+            let nameInput = document.getElementById('usernameInput').value;
+            let emailInput = document.getElementById('emailInput').value;
+            let notif = document.getElementById('notification');
+            let msg = "";
+
+            if (!reUser.test(nameInput)){
+                msg += "Invalid name";
+            }else if(! reEmail.test(emailInput)) {
+                msg += "Invalid email";
+            }else {
+                localStorage.setItem('name', nameInput);
+                localStorage.setItem('email', emailInput);
+                window.location.href = localStorage.getItem('page') + '.html';
+            }
+            notif.innerHTML = '<div class="alert alert-primary" role="alert">'
+                              + msg + '</div>';
+            event.preventDefault();
+           });
+        </script>
+    </body>
+</html>

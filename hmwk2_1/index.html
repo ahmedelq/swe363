@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>List of quizes</title>
+        <meta charset="utf-8">
+        <meta name="description" content="List of quizes at KFUPM">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body class="container">
+        <header>
+            <nav class="navbar navbar-light bg-light fixed-top">
+                <a class="navbar-brand" href="#"><span>Navbar</span></a>
+              </nav>          
+        </header>
+        <div class="space">
+            &NonBreakingSpace;
+        </div>
+        <main>
+            <h1>Take a quiz</h1>
+            <div class="jumbotron">
+            <nav>
+              <ul class="list-group">
+                  <li class="list-group-item"><a onclick="rtp('p1')">Quiz 1</a></li>
+                  <li class="list-group-item"><a onclick="rtp('p2')">Quiz 2</a></li>
+                  <li class="list-group-item"><a onclick="rtp('p3')">Quiz 3</a></li>
+              </ul>
+            </nav>
+            </div>
+        </main>
+        <script>
+            function rtp(p) {
+                localStorage.setItem('page', p);
+                window.location.href = "login.html";
+            }
+        </script>
+    </body>
+</html>

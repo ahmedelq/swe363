@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>List of quizes</title>
+        <meta charset="utf-8">
+        <meta name="description" content="List of quizes at KFUPM">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body class="container" onload="start()">
+        <header>
+            <nav class="navbar navbar-light bg-light fixed-top">
+                <a class="navbar-brand" href="index.html"><span>Navbar</span></a>
+              </nav>          
+        </header>
+        <div class="space">
+            &NonBreakingSpace;
+        </div>
+        <main>
+            <h1>Quiz #1</h1>
+            <div id="notification">Time remaining: <span id="timer"></span></div>
+                <form id="loginForm">
+                    <div id="mainContent" class="jumbotron">
+                            <div class="form-group">
+                                <h2 id="questionTitle">Question ?</h2>
+                            </div>
+                            <div class="form-group" id="choices">
+                                    <label class="questionChoice" onclick="selectAnswerOption(curQuestions, currentQuestion)"><input name="answer" id="ca" type="radio" value="a"><label for="ca">Option 1</label></label>
+                                    <label class="questionChoice" onclick="selectAnswerOption(curQuestions, currentQuestion)"><input name="answer" id="cb" type="radio" value="b"><label for="cb">Option 2</label></label>
+                                    <label class="questionChoice" onclick="selectAnswerOption(curQuestions, currentQuestion)"><input name="answer" id="cc" type="radio" value="c"><label for="cc">Option 3</label></label>
+                                    <label class="questionChoice" onclick="selectAnswerOption(curQuestions, currentQuestion)"><input name="answer" id="cd" type="radio" value="d"><label for="cd">Option 4</label></label>
+                            </div>
+                    <a href="#" style="float: right;" id="chgBtn" onclick="changeToMulti()" class="btn btn-warning">Submit all answers</a>
+                    <a href="#" onclick="prevQuestion()" class="btn btn-primary">Previous Question</a>
+                    <a href="#" onclick="nextQuestion()" class="btn btn-primary">Next Question</a>
+                    
+                </div>
+                </form>
+        </main>
+        <script>
+        let multiQuestions = [
+            {
+                question:"Which countries are NATO members",
+                a: "USA",
+                b: "Germany",
+                c: "Japan",
+                d: "France",
+                answer: ["a","b","d"],
+                usr_answer: []
+
+            }, 
+            {
+                question:"Which countries are in GCC",
+                a: "Saudi Arabia",
+                b: "Oman",
+                c: "Egypt",
+                d: "UAE",
+                answer: ["a","b","d"],
+                usr_answer: []
+
+            }, 
+            {
+                question:"Which countries are in the UN",
+                a: "Kosovo",
+                b: "Taiwan",
+                c: "Germany",
+                d: "Russia",
+                answer: ["c","d"],
+                usr_answer: []
+
+            }, 
+            {
+                question:"Which countries are part of EU ?",
+                a: "Germany",
+                b: "Switzerland",
+                c: "Turkey",
+                d: "Poland",
+                answer: ["a","d"],
+                usr_answer: []
+            }
+
+        ]
+        let questions = [
+            {
+                question: "What is the capital of Saudi Arabia",
+                a: "Makkah",
+                b: "Ryiadh",
+                c: "Najran",
+                d: "Abha",
+                answer: "b",
+                usr_answer: []
+            }, 
+            {
+                question: "Where is KFUPM",
+                a: "Dhahran",
+                b: "Ryiadh",
+                c: "Qatif",
+                d: "Jedda",
+                answer: "a",
+                usr_answer: []
+            }, 
+            {
+                question: "When was Saudi Arabia founded",
+                a: "1950",
+                b: "1997",
+                c: "1932",
+                d: "1902",
+                answer: "c",
+                usr_answer: []
+            }, 
+            {
+                question: "A famous Saudi city which was known for pearl trading",
+                a: "Jeddah",
+                b: "Jubail",
+                c: "Taif",
+                d: "Qatif",
+                answer: "d",
+                usr_answer: []
+            }
+            , 
+            {
+                question: "How many Muslim pilgrims travel to Mecca annually",
+                a: "4,000,000",
+                b: "1,000,000",
+                c: "20,000,000",
+                d: "500,00",
+                answer: "a",
+                usr_answer: []
+            }
+            , 
+            {
+                question: "Prophet Mohammed (pbuh) was born in",
+                a: "Madina",
+                b: "Mekkah",
+                c: "Dammam",
+                d: "Khobar",
+                answer: "b",
+                usr_answer: []
+            }
+        ];
+        let curQuestions = questions;
+        let currentQuestion = 0;
+        let totalRadioPoints = 0;
+        let totalCheckPoints = 0;
+        let x = null;
+        function changeToMulti() {
+            if(confirm('Are you sure you want to submit and go to next phase ?')){
+            curQuestions = multiQuestions;
+            currentQuestion = 0;
+            $(':radio').attr('type','checkbox');
+            $('#chgBtn').html("Grade answers");
+            $('#chgBtn').attr("onclick", "grade(questions, multiQuestions, confirm('Are you sure ?'))");
+            loadQuestion(curQuestions, 0);
+            }
+            now = new Date();
+            now.setMinutes(now.getMinutes() + 8);
+            clearInterval(x);
+            countDown(now);
+
+        }
+
+        function nextQuestion(){
+            if (currentQuestion >= curQuestions.length - 1) {
+                alert('No further questions')
+            } else {
+                currentQuestion += 1;
+                loadQuestion(curQuestions, currentQuestion);
+            }
+        }   
+
+        function prevQuestion(){
+            if (currentQuestion <= 0) {
+                alert('No previous questions')
+            } else {
+                currentQuestion -= 1;
+                console.log(currentQuestion);
+                loadQuestion(curQuestions, currentQuestion);
+            }
+        }  
+
+        function start() {
+            now = new Date();
+            now.setMinutes(now.getMinutes() + 10);
+            countDown(now);
+            loadQuestion(questions,0);
+        }
+        function countDown(countDownDate){
+            
+            x = setInterval(() => {
+
+            let now = new Date().getTime();
+            let rem = countDownDate - now;
+            var minutes = Math.floor((rem % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((rem % (1000 * 60)) / 1000);
+            document.getElementById('timer').innerHTML =  minutes + "m " + seconds + "s ";
+
+            if (rem < 0) {
+                clearInterval(x);
+                if(curQuestions == questions) {
+                    changeToMulti();
+                }else {
+                    grade(questions, multiQuestions, true);
+                }
+            }
+            }, 1000);
+            }
+                </script>
+        <script src="js/jquery-3.3.1.slim.min.js"></script>
+        <script src="js/jquery.canvasjs.min.js"></script>
+        <script src="js/question.js"></script>
+    </body>
+</html>
