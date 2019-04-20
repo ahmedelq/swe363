@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Get temperature</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script> 
+
+        <style>
+            main {
+                position: absolute;
+                top: 20%;
+                left: 50%;
+                transform: translate(-50%, -20%);
+                width:50%;
+            }
+            #msg {
+                margin: 0 auto;
+                border-radius: 4px;
+                padding:5px;
+                margin-bottom :15px;
+                border: 1px solid skyblue;
+            
+            }
+            form {
+                padding:15px;
+                border-radius: 4px;
+                text-align:center;
+                border: 1px solid skyblue;
+            }
+            #status {
+                font-style: italic;
+                color:#333;
+                font-weight: bold;
+            }
+            #cityRes{
+                color:darkgoldenrod;
+            }
+            #temp {
+                background-color:#aaa;
+                padding:5px;
+                border-radius: 13px;
+                color:white;
+            }
+        </style>
+    </head>
+    <body>
+       <main>
+           <div id="msg">
+               <div id="info">
+                   <p> 
+                       <span id="cityRes">Dhahran, SA</span>
+                       <img id="flag" src="https://www.countryflags.io/sa/flat/24.png">
+                       <span id="status">few clouds</p>
+                   <p> 
+                       <span id="temp">22° C</span>
+                       <span id="tInfo">temperature from 21 to 23 °C, wind 5.7 m/s. clouds 20%, 1009  hpa</span>
+                   </p>
+                </div>
+           </div>
+            <form>
+            <div class="container">
+                <div>
+                    <label for="city">City:*</label>
+                    <input type="text" name="city" id="city" value="" required>
+                </div>
+                <div>
+                    <label for="degree">Degree:*</label>
+                    <input type="radio" name="deg" value="f">Fahrenheit
+                    <input type="radio" name="deg" value="c" checked>Celsius
+                </div>
+                <div>
+                    <button id="search" type="submit">Search</button>
+                    <button id="clear" type="reset">Clear</button>
+
+                </div>
+            </div>
+            </form>
+       </main>
+       <script>
+           $(document).ready(function(){
+               $('form').on('submit', fetchData);
+               $('#city').val('Dhahran');
+               fetch('Dhahran');
+             
+           });
+
+           function getTemp(temp){
+               var m = $('input[name=deg]:checked').val();
+               temp = temp -273.1
+               if(m == 'c')
+                    return Math.round(temp)
+                return ( Math.round(temp * (9.0 / 5.0) + 32) ) 
+           }
+
+           function getM() {
+            var m = $('input[name=deg]:checked').val();
+            if(m == 'c')
+                return '° C'
+            return '° F'
+           }
+
+           function fetchData(event){
+            event.preventDefault();
+            var city = $('#city').val();
+            fetch(city);
+           }
+
+           function fetch (city){
+                $.ajax({
+                type: 'GET',
+				url: 'https://api.openweathermap.org/data/2.5/weather?q='+ city +'&APPID=8b7e677069f5be64cdd84b61c745e517', 
+				success: function(msg) {
+                    if(msg.cod != "200"){
+                        console.log("city not found");
+                        alert("City not found");
+                        return;
+                    }
+                    
+                    $('#cityRes').text(city + ", " + msg.sys.country);
+                    $('#flag').attr('src', 'https://www.countryflags.io/'+msg.sys.country+'/shiny/24.png');
+                    $('#status').text(msg.weather['0'].description);
+                    $('#temp').text(getTemp(msg.main.temp) + getM());
+                    $('#tInfo').text('temperature from '+ getTemp(msg.main.temp_min) + ' to ' + getTemp(msg.main.temp_max) + getM()+', wind ' + msg.wind.speed +' m/s. Clouds ' + msg.clouds.all + '%, ' + msg.main.pressure + ' hpa');
+
+                },
+                error: function(msg){
+                    console.log("city not found");
+                        alert("City not found");
+                },
+                });
+            }
+        
+       </script> 
+    </body>
+</html>
